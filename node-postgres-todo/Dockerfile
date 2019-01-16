@@ -11,5 +11,5 @@ RUN npm install
 
 EXPOSE 3000
 
-ENTRYPOINT [ "node", "models/database.js" ]
-CMD ["npm", "run","start"]
+# ENTRYPOINT [ "/wait-for.sh db:5432 -- echo asdasd" ]
+# CMD ["npm", "run","start"]

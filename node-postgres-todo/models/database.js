@@ -4,6 +4,7 @@ const connectionString =
 
 const client = new pg.Client(connectionString);
 client.connect();
+console.log("connected to client");
 const query = client.query(
   "CREATE TABLE items(id SERIAL PRIMARY KEY, text VARCHAR(40) not null, complete BOOLEAN)"
 );

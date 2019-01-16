@@ -4,10 +4,11 @@ ADD . /app
 
 WORKDIR /app
 
-RUN apt-get update
+RUN apt-get update && apt-get install dos2unix
 RUN npm install
 
-# RUN node model/database.js
+RUN chmod +x /app/entrypoint.sh
+RUN dos2unix entrypoint.sh
 
 EXPOSE 3000
 

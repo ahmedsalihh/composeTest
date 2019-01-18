@@ -9,7 +9,7 @@ amqp.connect(
       var msg = args.slice(1).join(" ") || "Hello World!";
       var severity = args.length > 0 ? args[0] : "info";
 
-      ch.assertExchange(ex, "direct", { durable: false });
+      ch.assertExchange(ex, "direct", { durable: true });
       ch.publish(ex, severity, new Buffer.from(msg));
       console.log(" [x] Sent %s: '%s'", severity, msg);
     });

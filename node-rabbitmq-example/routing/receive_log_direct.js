@@ -13,7 +13,7 @@ amqp.connect(
     conn.createChannel(function(err, ch) {
       var ex = "direct_logs";
 
-      ch.assertExchange(ex, "direct", { durable: false });
+      ch.assertExchange(ex, "direct", { durable: true });
 
       ch.assertQueue("", { exclusive: true }, function(err, q) {
         console.log(" [*] Waiting for logs. To exit press CTRL+C");

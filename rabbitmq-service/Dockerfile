@@ -2,14 +2,10 @@ FROM node:alpine
 
 ADD . /app
 WORKDIR /app
-
 RUN apk update
-RUN apk --no-cache add g++ gcc libgcc libstdc++ linux-headers make python bash
+RUN apk --no-cache add bash
 RUN npm install
 
-RUN mkdir -p ~/tutorials/osm ~/tutorials/leanow
+RUN chmod +x wait-for.sh appEntrypoint.sh 
 
 EXPOSE 7000
-
-ENTRYPOINT [ "node" ]
-CMD ["app.js"]

@@ -7,25 +7,22 @@ exports.get_rabbit = function(req, res) {
 
 exports.create_rabbit = function(req, res) {
   var data = req.body.data;
-  emitMessage(data);
+  emitMessage(data,"test");
   sentToQueue(data);
   res.send(data);
   res.send();
 };
 
-function emitMessage(msg) {
+function emitMessage(msg,topic) {
   amqp.connect(
-    "amqp://localhost",
+    "amqp://mq",
     function(err, conn) {
       conn.createChannel(function(err, ch) {
         var ex = "direct_logs";
-        var args = process.argv.slice(2);
-        // var msg = args.slice(1).join(" ") || "Hello World!";
-        var severity = args.length > 0 ? args[0] : "info";
 
         ch.assertExchange(ex, "direct", { durable: true });
-        ch.publish(ex, severity, new Buffer.from(msg));
-        console.log(" [x] Sent %s: '%s'", severity, msg);
+        ch.publish(ex, topic, new Buffer.from(msg));
+        console.log(" [x] Sent %s: '%s'", topic, msg);
       });
 
       setTimeout(function() {
@@ -38,7 +35,7 @@ function emitMessage(msg) {
 
 function sentToQueue(msg) {
   amqp.connect(
-    "amqp://localhost",
+    "amqp://mq",
     function(err, conn) {
       conn.createChannel(function(err, ch) {
         var q = "hello";

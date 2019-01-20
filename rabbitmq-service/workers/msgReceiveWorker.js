@@ -8,7 +8,7 @@ if (args.length == 0) {
 }
 
 amqp.connect(
-  "amqp://localhost",
+  "amqp://mq",
   function(err, conn) {
     conn.createChannel(function(err, ch) {
       var ex = "direct_logs";
@@ -26,7 +26,7 @@ amqp.connect(
           q.queue,
           function(msg) {
             console.log(
-              " [x] %s: '%s'",
+              " [x] received %s: '%s'",
               msg.fields.routingKey,
               msg.content.toString()
             );

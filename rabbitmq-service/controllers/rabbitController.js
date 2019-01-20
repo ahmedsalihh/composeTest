@@ -1,4 +1,4 @@
-var amqp = require("amqplib/callback_api");
+const amqp = require("amqplib/callback_api");
 
 exports.get_rabbit = function(req, res) {
   res.send("you've got rabitted");
@@ -6,19 +6,18 @@ exports.get_rabbit = function(req, res) {
 };
 
 exports.create_rabbit = function(req, res) {
-  var data = req.body.data;
-  emitMessage(data,"test");
-  sentToQueue(data);
+  const data = req.body;
+  emitMessage(JSON.stringify(data), "save_to_db");
   res.send(data);
-  res.send();
+  res.end();
 };
 
-function emitMessage(msg,topic) {
+function emitMessage(msg, topic) {
   amqp.connect(
     "amqp://mq",
     function(err, conn) {
       conn.createChannel(function(err, ch) {
-        var ex = "direct_logs";
+        const ex = "direct_logs";
 
         ch.assertExchange(ex, "direct", { durable: true });
         ch.publish(ex, topic, new Buffer.from(msg));
@@ -28,25 +27,6 @@ function emitMessage(msg,topic) {
       setTimeout(function() {
         conn.close();
         // process.exit(0);
-      }, 500);
-    }
-  );
-}
-
-function sentToQueue(msg) {
-  amqp.connect(
-    "amqp://mq",
-    function(err, conn) {
-      conn.createChannel(function(err, ch) {
-        var q = "hello";
-        // var msg = "Hello World!";
-
-        ch.assertQueue(q, { durable: true });
-        ch.sendToQueue(q, Buffer.from(msg));
-        console.log(" [x] Sent %s", msg);
-      });
-      setTimeout(function() {
-        conn.close();
       }, 500);
     }
   );

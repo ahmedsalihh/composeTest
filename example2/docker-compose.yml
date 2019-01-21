@@ -1,0 +1,20 @@
+version: "3"
+services:
+  mq:
+    image: rabbitmq
+    hostname: app-rabbitmq
+    ports:
+      - "5672:5672"
+  worker:
+    build: ./workers
+    depends_on:
+      - mq
+    command: sh -c "/workers/workerEntrypoint.sh"
+  app:
+    build: .
+    ports:
+      - "7000:7000"
+    depends_on:
+      - mq
+      - worker
+    command: sh -c "/app/appEntrypoint.sh"
